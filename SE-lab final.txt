@@ -1,0 +1,218 @@
+first on docker 
+---------------
+note: don't write what's inside ()....
+
+1.DOCKER---SINGLE-CONTAINER
+
+
+-->docker pull redis
+-->docker run --name my-redis -d redis
+-->docker exec -it my-redis redis-cli
+-->SET name "babai"
+-->GET name (ouput is babai)
+output:-open docker we can see my-redis
+
+
+2.DOCKER--MULTI-CONTAINER
+
+
+open browser and type docker hub and open
+search the frontend(workspace/anything given)
+next open compose then view compose
+copy the code...
+next create a folder name it anything
+crate a file inside it
+name:- docker-compose.yaml
+now paste the code inside this file
+changes to be done in code:-
+ports:-8090:80
+environment:-WORDPRESS_DB_HOST=db:3306
+now in terminal:-
+-->docker-compose up -d
+next open browser and type:- localhost:8090
+(show that output) completed....
+next in the same terminal type
+-->docker-compose stop
+
+3.KUBERNETS
+
+:: Start Docker
+docker --version
+docker ps
+docker pull nginx
+
+:: Start Minikube
+minikube start --driver=docker
+minikube status
+kubectl get nodes
+
+:: Create deployment with 2 replicas
+kubectl create deployment ganesh --image=nginx --replicas=2
+kubectl get deployments
+kubectl get pods
+
+:: Expose deployment
+kubectl expose deployment ganesh --type=NodePort --port=80 --target-port=80
+kubectl get services
+
+:: Access application (keep running in separate terminal)
+kubectl port-forward service/ganesh 8899:80
+:: Open http://localhost:8899
+
+
+4.NAGIOS
+
+-->docker pull jasonrivers/nagios:latest
+-->docker run --name nagiosdemo -p 8889:80 -d jasonrivers/nagios:latest
+next open brwoser and type:- localhost:8889
+in browser it shows:-
+username:
+password:
+in username type:-nagiosadmin
+in password type:-nagios
+next in the same cmd:-
+-->docker stop nagiosdemo
+
+
+5.AWS
+
+modules
+if not (start lab)
+search Ec2
+launch instance
+name
+ubuntu
+create new pair
+launch instance
+connect to instrance
+ssh -i "____.pem" ubuntu@public ipv4
+connect
+commands:
+sudo apt update
+sudo apt install git docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+git clone https://github.com/Kumbhambhargavi75/CEMS.git
+ls
+cd CEMS
+ls
+nano Dockerfile
+
+FROM maven:3.9.9-eclipse-temurin-8 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM tomcat:9.0-jre8-temurin
+COPY --from=build /app/target/CEMS.war /usr/local/tomcat/webapps/ROOT.war
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
+
+sudo docker build -t cems-app .
+sudo docker run -d --name cems-container -p 8087:8080 cems-app
+sudo docker ps
+sudo docker logs cems-container
+http://YOUR_EC2_PUBLIC_IP:8087
+
+6.JENKINS
+
+same for both java and web
+localhost:{port}
+
+
+for build 
+new item
+freestyle
+ok
+
+git?-->{given repo}
+Branch specifier-->main or master according to repo
+Add Build step-->Invoke top-level
+maven version-->maven Home
+goals-->clean
+Add Build step-->Invoke top-level
+maven version-->maven Home
+goals-->install
+Add post build actions-->Archive the artifacts
+**/*
+Add post build actions-->build other projects
+{filename for test ex:javatest}
+
+
+
+for test
+new item
+freestyle
+ok
+
+Build enviornment-->delete Workspace\
+Add Build step-->copy artifacts
+project name :{filename ex:javabuild}
+stable build {keep tick}
+**/*
+Add Build step-->Invoke top-level
+maven version-->maven Home
+goals-->test
+Add post build actions-->Archive the artifacts
+**/*
+
+
+
+script 
+
+give name 
+select pipeline instead of freestyle
+
+according to given question paste code 
+
+
+
+
+for running any  project
+create pipeline:
+ give name 
+new view-->Build pipeline view 
+select initial job-->{project_name Ex:javabuild}
+
+
+
+
+pipeline script:
+
+pipeline{
+    agent any
+    stages{
+        stage("clean"){
+            steps{
+                echo "cleaning sucessfully"
+            }
+        }
+        stage("build"){
+            steps{
+                echo " built sucessfully"
+            }
+        }
+        stage("test"){
+            steps{
+                echo "tesing sucessfully"
+            }
+        }
+        stage("package"){
+            steps{
+                echo "packaging suceesfully"
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
